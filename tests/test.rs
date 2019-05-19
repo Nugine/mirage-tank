@@ -4,7 +4,8 @@ use mirage_tank::MirageTank;
 
 const WPATH: &'static str = "./tests/w.jpg";
 const BPATH: &'static str = "./tests/b.jpg";
-const OPATH: &'static str = "./tests/o.png";
+const GREY_OPATH: &'static str = "./tests/o.grey.png";
+const COLORFUL_OPATH: &'static str = "./tests/o.colorful.png";
 
 fn open_images() -> (RgbaImage, RgbaImage) {
     let wimg = image::open(WPATH)
@@ -17,16 +18,15 @@ fn open_images() -> (RgbaImage, RgbaImage) {
 }
 
 #[test]
-fn grey() {
+fn test() {
     let (wimg, bimg) = open_images();
-    dbg!(wimg.dimensions());
-    dbg!(bimg.dimensions());
-    let mt = MirageTank::new(wimg, bimg, 300, 400);
-    dbg!(mt.size());
+    let mt = MirageTank::new(wimg, bimg, 300, 400).checkerboarded();
 
-    let output = mt.checkerboarded().grey_output(1.0, 0.2);
+    mt.grey_output(1.0, 0.2)
+        .save(GREY_OPATH)
+        .expect(&format!("fail to save output image to {}", GREY_OPATH));
 
-    output
-        .save(OPATH)
-        .expect(&format!("fail to save output image to {}", OPATH));
+    mt.colorful_output(1.0, 0.2, 0.5, 0.7)
+        .save(COLORFUL_OPATH)
+        .expect(&format!("fail to save output image to {}", COLORFUL_OPATH));
 }
