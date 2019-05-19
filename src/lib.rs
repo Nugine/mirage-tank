@@ -12,7 +12,6 @@ pub struct MirageTank {
     height: u32,
 }
 
-// getter
 impl MirageTank {
     #[inline]
     pub fn wimage(&self) -> &RgbaImage {
@@ -30,7 +29,6 @@ impl MirageTank {
     }
 }
 
-// core
 impl MirageTank {
     // wlight: [0,1], blight: [0,1]
     fn grey(wpixel: Rgba<u8>, bpixel: Rgba<u8>, wlight: f32, blight: f32) -> Rgba<u8> {
@@ -96,7 +94,6 @@ impl MirageTank {
     }
 }
 
-// pub
 impl MirageTank {
     #[inline]
     pub fn new(wimage: RgbaImage, bimage: RgbaImage, width: u32, height: u32) -> Self {
@@ -148,14 +145,18 @@ impl MirageTank {
     }
 
     #[inline]
-    pub fn grey_output(&self, wlight: f32, blight: f32) -> RgbaImage {
+    pub fn grey_output(&self, wlight: f32, blight: f32) -> Option<RgbaImage> {
         self.output(|wp, bp| MirageTank::grey(wp, bp, wlight, blight))
-            .expect("fail to create output image from pixels")
     }
 
     #[inline]
-    pub fn colorful_output(&self, wlight: f32, blight: f32, wcolor: f32, bcolor: f32) -> RgbaImage {
+    pub fn colorful_output(
+        &self,
+        wlight: f32,
+        blight: f32,
+        wcolor: f32,
+        bcolor: f32,
+    ) -> Option<RgbaImage> {
         self.output(|wp, bp| MirageTank::colorful(wp, bp, wlight, blight, wcolor, bcolor))
-            .expect("fail to create output image from pixels")
     }
 }

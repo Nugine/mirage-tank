@@ -23,10 +23,12 @@ fn test() {
     let mt = MirageTank::new(wimg, bimg, 300, 400).checkerboarded();
 
     mt.grey_output(1.0, 0.2)
+        .expect("fail to create output image")
         .save(GREY_OPATH)
         .expect(&format!("fail to save output image to {}", GREY_OPATH));
 
     mt.colorful_output(1.0, 0.2, 0.5, 0.7)
+        .expect("fail to create output image")
         .save(COLORFUL_OPATH)
         .expect(&format!("fail to save output image to {}", COLORFUL_OPATH));
 }
