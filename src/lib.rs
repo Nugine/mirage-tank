@@ -2,10 +2,12 @@ mod util;
 
 use image::load_from_memory;
 use image::DynamicImage;
+use image::GenericImageView;
 use image::ImageResult;
 use image::Pixel;
 use image::Rgba;
 use image::RgbaImage;
+
 use util::resized;
 use util::BLACK_RGBA;
 use util::WHITE_RGBA;
@@ -25,6 +27,16 @@ impl MirageTank {
         let wimage = load_from_memory(wbuffer)?;
         let bimage = load_from_memory(bbuffer)?;
         Ok(Self { wimage, bimage })
+    }
+
+    #[inline]
+    pub fn wimage_size(&self) -> (u32, u32) {
+        self.wimage.dimensions()
+    }
+
+    #[inline]
+    pub fn bimage_size(&self) -> (u32, u32) {
+        self.bimage.dimensions()
     }
 }
 
