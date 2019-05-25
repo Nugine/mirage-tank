@@ -27,7 +27,7 @@ fn test_sample_1() {
 
 #[test]
 fn test_sample_2() {
-    let (wpath, bpath, gpath, cpath) = sample_path(1);
+    let (wpath, bpath, gpath, cpath) = sample_path(2);
     let wbuf = std::fs::read(&wpath).expect(&format!("fail to open image: {}", wpath));
     let bbuf = std::fs::read(&bpath).expect(&format!("fail to open image: {}", bpath));
 
