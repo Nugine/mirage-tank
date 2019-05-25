@@ -1,8 +1,10 @@
 [package]
 name = "mirage-tank"
-version = "0.2.0"
+version = "0.2.1"
 authors = ["Nugine <nugine@foxmail.com>"]
 edition = "2018"
 
-[dependencies]
-image = "0.21.1"
+[dependencies.image]
+version = "0.21.1"
+default-features = false
+features = ["jpeg", "png_codec", "webp", "bmp"]
