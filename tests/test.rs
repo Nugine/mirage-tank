@@ -1,5 +1,3 @@
-use image::RgbaImage;
-
 use mirage_tank::MirageTank;
 
 fn sample_path(idx: u32) -> (String, String, String, String) {
@@ -11,39 +9,34 @@ fn sample_path(idx: u32) -> (String, String, String, String) {
     )
 }
 
-fn open_images(wpath: &str, bpath: &str) -> (RgbaImage, RgbaImage) {
-    let wimg = image::open(wpath)
-        .expect(&format!("fail to open image: {}", wpath))
-        .to_rgba();
-    let bimg = image::open(bpath)
-        .expect(&format!("fail to open image: {}", bpath))
-        .to_rgba();
-    (wimg, bimg)
-}
+#[test]
+fn test_sample_1() {
+    let (wpath, bpath, gpath, cpath) = sample_path(1);
+    let wimg = image::open(&wpath).expect(&format!("fail to open image: {}", wpath));
+    let bimg = image::open(&bpath).expect(&format!("fail to open image: {}", bpath));
 
-fn test_sample(idx: u32) {
-    let (wpath, bpath, gpath, cpath) = sample_path(idx);
+    let mt = MirageTank::new(wimg, bimg);
 
-    let (wimg, bimg) = open_images(&wpath, &bpath);
-    let mt = MirageTank::new(wimg, bimg, 300, 400).checkerboarded();
-
-    mt.grey_output(1.0, 0.2)
-        .expect("fail to create output image")
-        .save(&gpath)
+    let gimg = mt.grey_output(300, 400, true, 1.0, 0.2);
+    let cimg = mt.colorful_output(300, 400, false, 1.0, 0.2, 0.5, 0.7);
+    gimg.save(&gpath)
         .expect(&format!("fail to save output image to {}", gpath));
-
-    mt.colorful_output(1.0, 0.2, 0.5, 0.7)
-        .expect("fail to create output image")
-        .save(&cpath)
+    cimg.save(&cpath)
         .expect(&format!("fail to save output image to {}", cpath));
 }
 
 #[test]
-fn test_sample_1() {
-    test_sample(1);
-}
-
-#[test]
 fn test_sample_2() {
-    test_sample(2);
+    let (wpath, bpath, gpath, cpath) = sample_path(1);
+    let wbuf = std::fs::read(&wpath).expect(&format!("fail to open image: {}", wpath));
+    let bbuf = std::fs::read(&bpath).expect(&format!("fail to open image: {}", bpath));
+
+    let mt = MirageTank::from_raw(&wbuf, &bbuf).expect("fail to load image");
+
+    let gimg = mt.grey_output(300, 400, true, 1.0, 0.2);
+    let cimg = mt.colorful_output(300, 400, false, 1.0, 0.2, 0.5, 0.7);
+    gimg.save(&gpath)
+        .expect(&format!("fail to save output image to {}", gpath));
+    cimg.save(&cpath)
+        .expect(&format!("fail to save output image to {}", cpath));
 }
