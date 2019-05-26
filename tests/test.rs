@@ -40,3 +40,19 @@ fn test_sample_2() {
     cimg.save(&cpath)
         .expect(&format!("fail to save output image to {}", cpath));
 }
+
+#[test]
+fn test_sample_3() {
+    let (wpath, bpath, gpath, cpath) = sample_path(3);
+    let wbuf = std::fs::read(&wpath).expect(&format!("fail to open image: {}", wpath));
+    let bbuf = std::fs::read(&bpath).expect(&format!("fail to open image: {}", bpath));
+
+    let mt = MirageTank::from_raw(&wbuf, &bbuf).expect("fail to load image");
+
+    let gimg = mt.grey_output(1430, 854, true, 1.0, 0.2);
+    let cimg = mt.colorful_output(1430, 854, false, 1.0, 0.2, 0.5, 0.7);
+    gimg.save(&gpath)
+        .expect(&format!("fail to save output image to {}", gpath));
+    cimg.save(&cpath)
+        .expect(&format!("fail to save output image to {}", cpath));
+}

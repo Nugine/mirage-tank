@@ -8,7 +8,7 @@ pub fn resized(src: &DynamicImage, nwidth: u32, nheight: u32) -> DynamicImage {
     let (width, height) = src.dimensions();
     if nwidth < width && nheight < height {
         src.thumbnail_exact(nwidth, nheight)
-    } else if nwidth != width && nheight != height {
+    } else if nwidth != width || nheight != height {
         src.resize_exact(nwidth, nheight, imageops::CatmullRom)
     } else {
         src.clone()
